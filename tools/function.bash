@@ -38,6 +38,17 @@ ensure_commands() {
     fi
 }
 
+check_python_warning() {
+    local python_path=$(which python3)
+    local current_version=$(python3 --version | awk '{print $2}')
+    
+    # 检查是否是系统Python
+    if [[ "$python_path" == "/usr/bin/python3" ]]; then
+        log_warning "当前使用的是系统Python版本: ${current_version}"
+        log_warning "Python路径: ${python_path}"
+        log_warning "建议使用虚拟环境"
+    fi
+}
 
 install_apt_packages() {
     local packages_to_install=()
@@ -70,7 +81,7 @@ install_apt_packages() {
     done
 
     if [ ${#packages_to_install[@]} -eq 0 ]; then
-        log_success "${description} 已全部安装，无需更新。"
+        log_success "已全部安装，无需更新。"
         return 0
     fi
 
