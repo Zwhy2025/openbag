@@ -1,0 +1,76 @@
+# === C++ build artifacts ===
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+compile_commands.json
+*.o
+*.obj
+*.so
+*.a
+*.out
+*.exe
+*.log
+
+# Ninja build
+.ninja_deps
+.ninja_log
+build.ninja
+rules.ninja
+
+# === Python cache and artifacts ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Pipenv / Poetry / venv
+venv/
+.venv/
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# === OS generated ===
+.DS_Store
+Thumbs.db
+
+# === IDEs ===
+.vscode/
+.idea/
+.cursor/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# === Test / coverage ===
+htmlcov/
+.coverage
+.tox/
+.nox/
+.cache/
+pytest_cache/
+
+# === Logs / temp ===
+*.log
+*.tmp
+
+# === Misc ===
+*.gch
+*.orig
+*.rej
+
+# === Package management ===
+*.lock
+poetry.lock
+Pipfile.lock
+
+# === Openbag ===
+openbag/*
