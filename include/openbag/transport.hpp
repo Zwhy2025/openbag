@@ -32,8 +32,7 @@ struct has_parse_from_string : std::false_type
 };
 
 template <typename T>
-struct has_parse_from_string<
-    T, std::void_t<decltype(std::declval<T>().ParseFromString(std::string()))>> : std::true_type
+struct has_parse_from_string<T, std::void_t<decltype(std::declval<T>().ParseFromString(std::string()))>> : std::true_type
 {
 };
 
@@ -46,9 +45,7 @@ struct has_serialize_to_string : std::false_type
 };
 
 template <typename T>
-struct has_serialize_to_string<
-    T, std::void_t<decltype(std::declval<T>().SerializeToString(std::declval<std::string*>()))>>
-    : std::true_type
+struct has_serialize_to_string<T, std::void_t<decltype(std::declval<T>().SerializeToString(std::declval<std::string*>()))>> : std::true_type
 {
 };
 
@@ -108,8 +105,7 @@ public:
      * @return 订阅者基类指针
      */
     template <typename T>
-    std::shared_ptr<OpenbagSubscriberBase> CreateSubscriber(const std::string& topic,
-                                                            std::function<void(const T&)> callback)
+    std::shared_ptr<OpenbagSubscriberBase> CreateSubscriber(const std::string& topic, std::function<void(const T&)> callback)
     {
         return CreateSubscriberInternal<T>(topic, callback);
     }
@@ -130,8 +126,10 @@ protected:
      * @return 订阅者基类指针
      */
     template <typename T>
-    std::shared_ptr<OpenbagSubscriberBase> CreateSubscriberInternal(
-        const std::string& topic, std::function<void(const T&)> callback);
+    std::shared_ptr<OpenbagSubscriberBase> CreateSubscriberInternal(const std::string& topic, std::function<void(const T&)> callback)
+    {
+        throw std::runtime_error("CreateSubscriberInternal must be implemented by derived classes");
+    }
 };
 
 using MessageAdapterFactoryPtr = std::shared_ptr<MessageAdapterFactory>;

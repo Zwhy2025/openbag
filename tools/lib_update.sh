@@ -24,13 +24,13 @@ main() {
   # 检查Python版本
   check_python_warning
 
-  install_apt_packages 依赖库\
+  install_apt_packages \
     libyaml-cpp-dev \
     liblz4-dev \
     libzstd-dev \
-    protobuf-compiler\
-    libprotobuf-dev\
-    libprotoc-dev\
+    protobuf-compiler \
+    libprotobuf-dev \
+    libprotoc-dev
 
   # 检查 mcap 库
   build_from_source \

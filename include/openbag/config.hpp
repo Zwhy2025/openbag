@@ -28,8 +28,8 @@ namespace openbag {
  */
 struct StorageConfig
 {
-    int comperssion_level = 0;                                 ///< 压缩级别
-    CompressionType comperssion_type = CompressionType::NONE;  ///< 压缩类型
+    int compression_level = 0;                                 ///< 压缩级别
+    CompressionType compression_type = CompressionType::NONE;  ///< 压缩类型
     std::vector<std::string> proto_search_paths;               ///< proto搜索路径
 
     size_t write_batch_size = 1000;
@@ -208,19 +208,19 @@ public:
                     std::string type = config["compression"]["type"].as<std::string>();
                     if (type == "none")
                     {
-                        m_storageConfig.comperssion_type = CompressionType::NONE;
+                        m_storageConfig.compression_type = CompressionType::NONE;
                     } else if (type == "lz4")
                     {
-                        m_storageConfig.comperssion_type = CompressionType::LZ4;
+                        m_storageConfig.compression_type = CompressionType::LZ4;
                     } else if (type == "zstd")
                     {
-                        m_storageConfig.comperssion_type = CompressionType::ZSTD;
+                        m_storageConfig.compression_type = CompressionType::ZSTD;
                     }
                 }
 
                 if (config["compression"]["level"])
                 {
-                    m_storageConfig.comperssion_level = config["compression"]["level"].as<int>();
+                    m_storageConfig.compression_level = config["compression"]["level"].as<int>();
                 }
             }
 

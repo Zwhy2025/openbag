@@ -5,7 +5,7 @@
  * @version 0.1
  * @date 2025-05-22
  *
- * @file mcap_reader.hpp
+ * @file reader.hpp
  * @brief MCAP 格式文件读取器，支持 Protobuf 消息的动态解析 - 纯hpp实现
  */
 
@@ -112,7 +112,7 @@ public:
      * @brief 获取流式消息视图，用于按需读取消息
      * @return 消息视图
      */
-    auto GetMessages()
+    auto GetMessages() -> mcap::LinearMessageView
     {
         if (!m_isOpen)
         {

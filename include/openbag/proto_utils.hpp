@@ -30,11 +30,9 @@ namespace openbag {
 class ErrorCollector : public google::protobuf::compiler::MultiFileErrorCollector
 {
 public:
-    void AddError(const std::string& filename, int line, int column,
-                  const std::string& message) override
+    void AddError(const std::string& filename, int line, int column, const std::string& message) override
     {
-        std::cerr << "Proto解析错误: " << filename << ":" << line << ":" << column << ": "
-                  << message << std::endl;
+        std::cerr << "Proto解析错误: " << filename << ":" << line << ":" << column << ": " << message << std::endl;
     }
 };
 
@@ -45,8 +43,7 @@ class ProtoImporterWrapper
 {
 public:
     explicit ProtoImporterWrapper(const std::vector<std::string>& search_paths)
-        : m_source_tree(std::make_unique<google::protobuf::compiler::DiskSourceTree>()),
-          m_error_collector(std::make_unique<ErrorCollector>())
+        : m_source_tree(std::make_unique<google::protobuf::compiler::DiskSourceTree>()), m_error_collector(std::make_unique<ErrorCollector>())
     {
         // 设置Proto文件搜索路径
         for (const auto& path : search_paths)
@@ -54,8 +51,7 @@ public:
             m_source_tree->MapPath("", path);
         }
 
-        m_importer = std::make_unique<google::protobuf::compiler::Importer>(
-            m_source_tree.get(), m_error_collector.get());
+        m_importer = std::make_unique<google::protobuf::compiler::Importer>(m_source_tree.get(), m_error_collector.get());
     }
 
     google::protobuf::compiler::Importer* get() { return m_importer.get(); }
@@ -73,8 +69,7 @@ private:
  * @param descriptor 消息描述符
  * @return 序列化后的FileDescriptorSet字符串
  */
-inline std::string CreateFileDescriptorSetFromDescriptor(
-    const google::protobuf::Descriptor* descriptor)
+inline std::string CreateFileDescriptorSetFromDescriptor(const google::protobuf::Descriptor* descriptor)
 {
     google::protobuf::FileDescriptorSet fileDescriptorSet;
 
@@ -104,9 +99,12 @@ inline std::string CreateFileDescriptorSetFromDescriptor(
  * @param toplevelDescriptor 顶层消息描述符
  * @return FileDescriptorSet对象
  */
-inline google::protobuf::FileDescriptorSet BuildFileDescriptorSet(
-    const google::protobuf::Descriptor* toplevelDescriptor)
+inline google::protobuf::FileDescriptorSet BuildFileDescriptorSet(const google::protobuf::Descriptor* toplevelDescriptor)
 {
+    if (toplevelDescriptor == nullptr)
+    {
+        return {};
+    }
     google::protobuf::FileDescriptorSet fdSet;
     std::queue<const google::protobuf::FileDescriptor*> pending;
     std::unordered_set<std::string> seen;
@@ -142,10 +140,6 @@ inline google::protobuf::FileDescriptorSet BuildFileDescriptorSet(
  * @param search_paths Proto文件搜索路径
  * @return Proto导入器包装器
  */
-inline std::unique_ptr<ProtoImporterWrapper> CreateProtoImporter(
-    const std::vector<std::string>& search_paths)
-{
-    return std::make_unique<ProtoImporterWrapper>(search_paths);
-}
+inline std::unique_ptr<ProtoImporterWrapper> CreateProtoImporter(const std::vector<std::string>& search_paths) { return std::make_unique<ProtoImporterWrapper>(search_paths); }
 
 }  // namespace openbag
