@@ -38,8 +38,6 @@ ensure_commands() {
 
 
 install_apt_packages() {
-    local description="$1"
-    shift
     local packages_to_install=()
     
     sudo apt update
@@ -48,8 +46,6 @@ install_apt_packages() {
         log_error "未提供任何要安装的包。"
         return 1
     fi
-
-    log_info "检查并安装：${description}..."
 
     for pkg_version in "$@"; do
         local pkg="${pkg_version%%=*}"
