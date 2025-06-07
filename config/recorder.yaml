@@ -1,0 +1,9 @@
+output:
+  output_path: "./openbags/"
+  output_format: "mcap"
+  filename_prefix: "openbag"
+
+topics:
+  - name: /test/topic
+    type: std_msgs/String
+    proto_file: "std_msgs/String.proto"
