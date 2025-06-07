@@ -85,13 +85,12 @@ install_apt_packages() {
         return 0
     fi
 
-    log_info "安装 ${description}: ${packages_to_install[*]}"
+    log_info "安装: ${packages_to_install[*]}"
     sudo apt install -y --no-install-recommends "${packages_to_install[@]}" || {
-        log_error "安装 ${description} 失败。"
         return 1
     }
 
-    log_success "${description} 安装完成。"
+    log_success "安装完成。"
 }
 
 
