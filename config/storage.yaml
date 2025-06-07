@@ -1,0 +1,15 @@
+# proto搜索路径
+format:
+  search_paths:
+    - "/usr/include"
+    - "/usr/local/include"
+
+max_file_size: 1        # 最大文件大小       : 单位GiB
+chunk_size: 4           # 每块数据的最大大小  : 单位MiB
+write_batch_size: 1000  # 单次写入批量       :  条
+split_by_size: false     # 是否更具大小切分文件 : bool
+
+# 压缩配置
+compression:
+  type: "zstd"    # 压缩类型: none, lz4, zstd
+  level: 0        # 压缩级别: 0-4

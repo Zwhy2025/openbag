@@ -1,0 +1,26 @@
+services:
+  robotics_project:
+    image: zwhy2025/robotics:base
+    container_name: robotics_container
+    privileged: true  
+    working_dir: /workspace
+    environment:
+      - ACCEPT_EULA=Y
+      - PRIVACY_CONSENT=Y
+      - DISPLAY=${DISPLAY}
+      - QT_X11_NO_MITSHM=1
+    volumes:
+      - ./:/workspace
+      - ${HOME}/.Xauthority:/root/.Xauthority
+      - /tmp:/tmp
+      - /dev:/dev
+    tmpfs:
+      - /run
+      - /run/lock
+    network_mode: host
+    shm_size: '16g'
+    ulimits:
+      memlock: -1
+    tty: true
+    stdin_open: true
+    ipc: host
