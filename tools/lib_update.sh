@@ -30,7 +30,10 @@ main() {
     libzstd-dev \
     protobuf-compiler \
     libprotobuf-dev \
-    libprotoc-dev
+    libprotoc-dev \
+    libfastcdr-dev \
+    libfastrtps-dev \
+    fastddsgen 
 
   # 检查 mcap 库
   build_from_source \

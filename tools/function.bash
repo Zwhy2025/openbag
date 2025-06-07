@@ -1,4 +1,3 @@
-
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
@@ -22,6 +21,9 @@ log_error() {
     exit 1
 }
 
+set_error_handling() {
+    set -euo pipefail
+}
 
 ensure_commands() {
     local missing_cmds=()
