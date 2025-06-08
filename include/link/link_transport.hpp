@@ -49,7 +49,7 @@ public:
 
 private:
     std::string topic_name_;
-    std::shared_ptr<link::SubscriberBase<std::string>> link_subscriber_;
+    std::shared_ptr<Link::SubscriberBase<std::string>> link_subscriber_;
 };
 
 /**
@@ -93,10 +93,10 @@ public:
         return false;
     }
 
-private : std::string topic_name_;
-std::shared_ptr<Link::PublisherBase<std::string>> link_publisher_;
-}
-;
+private:
+    std::string topic_name_;
+    std::shared_ptr<Link::PublisherBase<std::string>> link_publisher_;
+};
 
 /**
  * @brief Link适配器工厂

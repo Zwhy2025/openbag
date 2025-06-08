@@ -91,8 +91,9 @@ GENERATE_MESSAGE_CODE(
     ${CMAKE_BINARY_DIR}/generated
 )
 
-# 公共库列表
-# COMMON_LIBS is now inherited from parent scope and already includes fastcdr and fastrtps
+find_package(fastcdr REQUIRED)
+find_package(fastrtps REQUIRED)
+
 
 # 生成示例可执行文件并链接所有消息库
 foreach(exec IN ITEMS
@@ -102,8 +103,16 @@ foreach(exec IN ITEMS
         op_topic_subscriber
     )
     add_executable(${exec} ${exec}.cc)
-    # Link against openbag_core, common libs, and all message specific libs
-    target_link_libraries(${exec} PRIVATE openbag_core ${COMMON_LIBS} ${ALL_MESSAGE_LIBS})
+    target_link_libraries(${exec} PRIVATE  
+        ${Protobuf_LIBRARIES}
+        yaml-cpp
+        pthread
+        mcap
+        fastcdr
+        fastrtps
+        ${ALL_MESSAGE_LIBS}
+        ${Protobuf_LIBRARIES}
+    )
 endforeach()
 
 message(STATUS "Examples 配置完成") 

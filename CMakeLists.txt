@@ -15,8 +15,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(yaml-cpp REQUIRED)
 find_package(Protobuf REQUIRED)
 find_package(mcap REQUIRED)
-find_package(fastcdr REQUIRED)
-find_package(fastrtps REQUIRED)
 
 #-----------------------------------------------------------------------
 # 包含目录与链接库配置
@@ -36,16 +34,8 @@ set(COMMON_LIBS
     pthread
     mcap
     ${Protobuf_LIBRARIES}
-    fastcdr # Added
-    fastrtps # Added
 )
 
-#-----------------------------------------------------------------------
-# OpenBag Core Library (Header-Only Interface)
-#-----------------------------------------------------------------------
-add_library(openbag_core INTERFACE)
-target_include_directories(openbag_core INTERFACE ${PROJECT_INCLUDES})
-target_link_libraries(openbag_core INTERFACE ${COMMON_LIBS}) # Also propagate link libraries
 
 #-----------------------------------------------------------------------
 # 示例程序
