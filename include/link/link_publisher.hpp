@@ -35,7 +35,6 @@
 #include "dds_participant.hpp"
 #include "general.h"
 #include "generalPubSubTypes.h"
-#include "test.pb.h"
 
 namespace Link {
 /**
@@ -91,7 +90,7 @@ public:
      */
     DDSPublisher(const std::string& topic_name)
         : m_topicName(topic_name),
-          m_participant(Link::Participant::get_participant()),
+          m_participant(Link::Participant::GetParticipant()),
           m_ddsPublisher(nullptr),
           m_topic(nullptr),
           m_writer(nullptr),
@@ -167,14 +166,8 @@ public:
         {
             return false;
         }
-        if constexpr (std::is_same<T, std::string>::value)
-        {
-            return TransferAndPublish(message);
-        } else if constexpr (std::is_base_of<google::protobuf::Message, T>::value)
-        {
-            return SerializeAndPublish(message);
-        }
-        return false;
+
+        return SerializeAndPublish(message);
     }
 
     /**
@@ -184,13 +177,6 @@ public:
     const std::string& GetTopicName() const override { return m_topicName; }
 
 private:
-    bool TransferAndPublish(const std::string& message)
-    {
-        m_generalMsgInstance.header().type("string");
-        m_generalMsgInstance.payload().assign(message.begin(), message.end());
-        return m_writer->write(&m_generalMsgInstance);
-    }
-
     /**
      * @brief 序列化Protobuf消息并发布。
      * @tparam U 消息类型，必须是google::protobuf::Message的派生类

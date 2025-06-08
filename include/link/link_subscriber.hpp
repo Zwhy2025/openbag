@@ -38,7 +38,6 @@
 #include "dds_participant.hpp"
 #include "general.h"
 #include "generalPubSubTypes.h"
-#include "test.pb.h"
 
 namespace Link {
 /**
@@ -161,9 +160,8 @@ public:
             return false;
         }
 
-        DDSSubscriber<T>* m_ownerSubscriber;    ///< 拥有此监听器的DDSSubscriber实例指针
-        UserCallbackType m_userCallback;        ///< 用户提供的消息处理回调函数
-        General::Message m_receivedGeneralMsg;  ///< 接收到的通用消息实例
+        DDSSubscriber<T>* m_ownerSubscriber;  ///< 拥有此监听器的DDSSubscriber实例指针
+        UserCallbackType m_userCallback;      ///< 用户提供的消息处理回调函数
     };
 
     /**
@@ -174,7 +172,7 @@ public:
      */
     DDSSubscriber(const std::string& topic_name, UserCallbackType callback)
         : m_topicName(topic_name),
-          m_participant(Link::Participant::get_participant()),
+          m_participant(Link::Participant::GetParticipant()),
           m_ddsSubscriber(nullptr),
           m_topic(nullptr),
           m_reader(nullptr),
@@ -257,7 +255,6 @@ private:
     eprosima::fastdds::dds::TypeSupport m_typeSupport;         ///< FastDDS类型支持
     DDSSubscriberListener m_listener;                          ///< 订阅者监听器
     UserCallbackType m_userCallback;                           ///< 用户提供的消息处理回调函数
-    General::Message m_receivedGeneralMsg;                     ///< 接收到的通用消息实例
 };
 
 /**

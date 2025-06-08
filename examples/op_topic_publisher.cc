@@ -1,3 +1,5 @@
+#include <signal.h>
+
 #include <atomic>
 #include <chrono>
 #include <iostream>
@@ -5,7 +7,6 @@
 #include <thread>
 
 #include "link/link_publisher.hpp"
-#include "signal.h"
 #include "test.pb.h"
 
 std::atomic<bool> keep_running(true);

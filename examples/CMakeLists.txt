@@ -104,7 +104,6 @@ foreach(exec IN ITEMS
     )
     add_executable(${exec} ${exec}.cc)
     target_link_libraries(${exec} PRIVATE  
-        ${Protobuf_LIBRARIES}
         yaml-cpp
         pthread
         mcap
