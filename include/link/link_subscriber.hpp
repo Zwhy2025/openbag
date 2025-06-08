@@ -89,7 +89,7 @@ public:
         {
             eprosima::fastdds::dds::SampleInfo info;
             General::Message receivedGeneralMsgLocal;  // Declare a local message object
-            if (reader->read_next_sample(&receivedGeneralMsgLocal, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
+            if (reader->take_next_sample(&receivedGeneralMsgLocal, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
             {
                 if (info.instance_state == eprosima::fastdds::dds::ALIVE_INSTANCE_STATE)
                 {
