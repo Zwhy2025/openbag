@@ -106,7 +106,4 @@ foreach(exec IN ITEMS
     target_link_libraries(${exec} PRIVATE openbag_core ${COMMON_LIBS} ${ALL_MESSAGE_LIBS})
 endforeach()
 
-message(STATUS "消息生成与示例配置完成。")
-
-
 message(STATUS "Examples 配置完成") 

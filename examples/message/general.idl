@@ -3,7 +3,7 @@ module General {
     struct GHeader {
         string id;      // 消息ID
         string type;    // 消息类型
-        long timestamp;         // 时间戳
+        long long timestamp;         // 时间戳
         string version;         // 协议版本
     };
     
