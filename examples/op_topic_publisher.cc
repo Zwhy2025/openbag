@@ -1,127 +1,58 @@
-#include <fastrtps/attributes/ParticipantAttributes.h>
-#include <fastrtps/attributes/PublisherAttributes.h>
+#include "link/link.hpp" // For the new Link module
+#include "examples/message/generated/test.pb.h" // For the Test Protobuf message
 
-#include <chrono>
-#include <fastdds/dds/domain/DomainParticipant.hpp>
-#include <fastdds/dds/domain/DomainParticipantFactory.hpp>
-#include <fastdds/dds/publisher/DataWriter.hpp>
-#include <fastdds/dds/publisher/DataWriterListener.hpp>
-#include <fastdds/dds/publisher/Publisher.hpp>
-#include <fastdds/dds/publisher/qos/DataWriterQos.hpp>
-#include <fastdds/dds/subscriber/qos/DataReaderQos.hpp>
-#include <fastdds/dds/topic/Topic.hpp>
 #include <iostream>
 #include <string>
 #include <thread>
+#include <chrono>
 
-#include "general.h"
-#include "generalPubSubTypes.h"
+int main(int argc, char* argv[]) {
+    std::cout << "Starting new publisher example..." << std::endl;
 
-using namespace eprosima::fastdds::dds;
-using namespace General;
+    // Create a string publisher
+    auto string_publisher = link::Link::CreatePublisher<std::string>("string_topic_test");
+    if (!string_publisher) {
+        std::cerr << "Failed to create string publisher!" << std::endl;
+        return -1;
+    }
+    std::cout << "String publisher created for topic: " << string_publisher->get_topic_name() << std::endl;
 
-class MyPublisher
-{
-public:
-    MyPublisher() : participant_(nullptr), publisher_(nullptr), topic_(nullptr), writer_(nullptr), type_(new MessagePubSubType()) {}
+    // Create a Protobuf Test message publisher
+    auto proto_publisher = link::Link::CreatePublisher<Test>("proto_topic_test");
+    if (!proto_publisher) {
+        std::cerr << "Failed to create proto publisher!" << std::endl;
+        return -1;
+    }
+    std::cout << "Proto publisher created for topic: " << proto_publisher->get_topic_name() << std::endl;
 
-    ~MyPublisher()
-    {
-        if (writer_ != nullptr)
-        {
-            publisher_->delete_datawriter(writer_);
+    // Publishing loop
+    for (int i = 0; i < 10; ++i) {
+        // Publish a string message
+        std::string str_message = "Hello from Link String Publisher! Count: " + std::to_string(i);
+        if (string_publisher->publish(str_message)) {
+            std::cout << "Sent string: "" << str_message << """ << std::endl;
+        } else {
+            std::cerr << "Failed to send string message." << std::endl;
         }
-        if (topic_ != nullptr)
-        {
-            participant_->delete_topic(topic_);
+
+        // Publish a Protobuf message
+        Test test_message;
+        test_message.set_id(i);
+        test_message.set_message("Hello from Link Proto Publisher! Count: " + std::to_string(i));
+        if (proto_publisher->publish(test_message)) {
+            std::cout << "Sent proto: id=" << test_message.id() << ", message="" << test_message.message() << """ << std::endl;
+        } else {
+            std::cerr << "Failed to send proto message." << std::endl;
         }
-        if (publisher_ != nullptr)
-        {
-            participant_->delete_publisher(publisher_);
-        }
-        if (participant_ != nullptr)
-        {
-            DomainParticipantFactory::get_instance()->delete_participant(participant_);
-        }
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
     }
 
-    bool init()
-    {
-        DomainParticipantQos pqos;
-        pqos.name("PublisherParticipant");
-        participant_ = DomainParticipantFactory::get_instance()->create_participant(0, pqos);
+    std::cout << "Publisher example finished." << std::endl;
 
-        if (participant_ == nullptr)
-        {
-            return false;
-        }
+    // Allow some time for messages to be sent before participant might be released implicitly by program end.
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+    link::Link::ReleaseParticipant(); // Optional: explicit cleanup
 
-        type_.register_type(participant_);
-
-        PublisherQos pubqos;
-        publisher_ = participant_->create_publisher(pubqos, nullptr);
-
-        if (publisher_ == nullptr)
-        {
-            return false;
-        }
-
-        TopicQos tqos;
-        tqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
-        tqos.durability().kind = TRANSIENT_LOCAL_DURABILITY_QOS;
-        topic_ = participant_->create_topic("GeneralTopic", "General::Message", tqos);
-
-        if (topic_ == nullptr)
-        {
-            return false;
-        }
-
-        DataWriterQos wqos;
-        wqos.reliability().kind = RELIABLE_RELIABILITY_QOS;
-        wqos.durability().kind = TRANSIENT_LOCAL_DURABILITY_QOS;
-        writer_ = publisher_->create_datawriter(topic_, wqos, nullptr);
-
-        if (writer_ == nullptr)
-        {
-            return false;
-        }
-
-        std::cout << "Publisher initialized." << std::endl;
-        return true;
-    }
-
-    void run(uint32_t samples)
-    {
-        Message msg;
-        msg.header().id("publisher-id");
-        msg.header().type("example-message");
-        msg.header().version("1.0");
-
-        for (uint32_t i = 0; i < samples; ++i)
-        {
-            msg.header().timestamp(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
-            msg.payload(std::vector<uint8_t>(i % 10 + 1, (uint8_t)('A' + (i % 26))));
-
-            writer_->write(&msg);
-            std::cout << "Publishing message " << i << std::endl;
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-        }
-    }
-
-protected:
-    DomainParticipant* participant_;
-    Publisher* publisher_;
-    Topic* topic_;
-    DataWriter* writer_;
-    TypeSupport type_;
-};
-
-int main(int argc, char** argv)
-{
-    MyPublisher publisher;
-    if (publisher.init())
-    {
-        publisher.run(10);  // Publish 10 samples
-    }
     return 0;
 }
