@@ -21,6 +21,7 @@ find_package(mcap REQUIRED)
 #-----------------------------------------------------------------------
 set(PROJECT_INCLUDES
     ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_BINARY_DIR}/generated # Added for generated IDL/Proto
     ${Protobuf_INCLUDE_DIRS}
     ${MCAP_INCLUDE_DIRS}
 )
@@ -34,6 +35,7 @@ set(COMMON_LIBS
     mcap
     ${Protobuf_LIBRARIES}
 )
+
 
 #-----------------------------------------------------------------------
 # 示例程序
