@@ -89,11 +89,12 @@ public:
         void on_data_available(eprosima::fastdds::dds::DataReader* reader) override
         {
             eprosima::fastdds::dds::SampleInfo info;
-            if (reader->read_next_sample(&m_receivedGeneralMsg, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
+            General::Message receivedGeneralMsgLocal;  // Declare a local message object
+            if (reader->read_next_sample(&receivedGeneralMsgLocal, &info) == eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
             {
                 if (info.instance_state == eprosima::fastdds::dds::ALIVE_INSTANCE_STATE)
                 {
-                    DeserializeAndInvoke(m_receivedGeneralMsg);
+                    DeserializeAndInvoke(receivedGeneralMsgLocal);
                 }
             }
         }

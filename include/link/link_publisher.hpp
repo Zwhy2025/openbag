@@ -102,7 +102,10 @@ public:
             throw std::runtime_error("DdsPublisher: DomainParticipant is null for topic " + m_topicName + "!");
         }
 
-        m_typeSupport.register_type(m_participant);
+        if (m_typeSupport.register_type(m_participant) != eprosima::fastrtps::types::ReturnCode_t::RETCODE_OK)
+        {
+            throw std::runtime_error("DdsPublisher: Failed to register type for topic " + m_topicName);
+        }
 
         m_ddsPublisher = m_participant->create_publisher(eprosima::fastdds::dds::PUBLISHER_QOS_DEFAULT, nullptr);
         if (m_ddsPublisher == nullptr)
