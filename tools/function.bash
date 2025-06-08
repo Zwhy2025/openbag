@@ -1,4 +1,3 @@
-
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 RED='\033[0;31m'
@@ -22,6 +21,9 @@ log_error() {
     exit 1
 }
 
+set_error_handling() {
+    set -euo pipefail
+}
 
 ensure_commands() {
     local missing_cmds=()
@@ -36,6 +38,17 @@ ensure_commands() {
     fi
 }
 
+check_python_warning() {
+    local python_path=$(which python3)
+    local current_version=$(python3 --version | awk '{print $2}')
+    
+    # 检查是否是系统Python
+    if [[ "$python_path" == "/usr/bin/python3" ]]; then
+        log_warning "当前使用的是系统Python版本: ${current_version}"
+        log_warning "Python路径: ${python_path}"
+        log_warning "建议使用虚拟环境"
+    fi
+}
 
 install_apt_packages() {
     local packages_to_install=()
@@ -68,17 +81,16 @@ install_apt_packages() {
     done
 
     if [ ${#packages_to_install[@]} -eq 0 ]; then
-        log_success "${description} 已全部安装，无需更新。"
+        log_success "已全部安装，无需更新。"
         return 0
     fi
 
-    log_info "安装 ${description}: ${packages_to_install[*]}"
+    log_info "安装: ${packages_to_install[*]}"
     sudo apt install -y --no-install-recommends "${packages_to_install[@]}" || {
-        log_error "安装 ${description} 失败。"
         return 1
     }
 
-    log_success "${description} 安装完成。"
+    log_success "安装完成。"
 }
 
 

@@ -1,0 +1,14 @@
+// general.idl
+module General {
+    struct GHeader {
+        string id;      // 消息ID
+        string type;    // 消息类型
+        long long timestamp;         // 时间戳
+        string version;         // 协议版本
+    };
+    
+    struct Message {
+        GHeader header;    // 消息头
+        sequence<octet> payload; // 二进制数据（可存放proto序列化数据）
+    };
+};
