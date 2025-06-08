@@ -49,7 +49,7 @@ public:
 
 private:
     std::string topic_name_;
-    std::shared_ptr<Link::SubscriberBase> link_subscriber_;
+    std::shared_ptr<Link::SubscriberBase<std::string>> link_subscriber_;
 };
 
 /**
@@ -90,14 +90,13 @@ public:
         {
             return link_publisher_->Publish(data);
         }
+        return false;
+    }
 
-    }  // namespace openbag       return false;
-}
-
-private : std::string topic_name_;
-std::shared_ptr<Link::PublisherBase<std::string>> link_publisher_;
-}
-;
+private:
+    std::string topic_name_;
+    std::shared_ptr<Link::PublisherBase<std::string>> link_publisher_;
+};
 
 /**
  * @brief Link适配器工厂
