@@ -68,7 +68,7 @@ public:
         mcap::McapWriterOptions writerOptions("");
 
         // 根据配置设置压缩选项
-        switch (m_config.comperssion_type)
+        switch (m_config.compression_type)
         {
             case CompressionType::NONE:
                 writerOptions.compression = mcap::Compression::None;
@@ -81,7 +81,7 @@ public:
                 break;
         }
 
-        writerOptions.compressionLevel = static_cast<mcap::CompressionLevel>(m_config.comperssion_level);
+        writerOptions.compressionLevel = static_cast<mcap::CompressionLevel>(m_config.compression_level);
 
         writerOptions.chunkSize = m_config.chunk_size;  // 1MB
         return writerOptions;

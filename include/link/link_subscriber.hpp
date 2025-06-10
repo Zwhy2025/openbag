@@ -43,7 +43,7 @@ namespace Link {
 /**
  * @brief 订阅者基类接口，定义了订阅消息的通用契约。
  */
-template <typename T>
+
 class SubscriberBase
 {
 public:
@@ -60,7 +60,7 @@ public:
  * @tparam T 消息类型，可以是Protobuf消息或std::string
  */
 template <typename T>
-class DDSSubscriber : public SubscriberBase<T>
+class DDSSubscriber : public SubscriberBase
 {
 public:
     /**
@@ -265,7 +265,7 @@ private:
  * @return Link::SubscriberBase<T>的共享指针
  */
 template <typename T>
-std::shared_ptr<Link::SubscriberBase<T>> CreateSubscriber(const std::string& topic_name, std::function<void(const T&)> callback)
+std::shared_ptr<Link::SubscriberBase> CreateSubscriber(const std::string& topic_name, std::function<void(const T&)> callback)
 {
     return std::make_shared<DDSSubscriber<T>>(topic_name, callback);
 }

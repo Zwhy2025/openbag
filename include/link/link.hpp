@@ -10,7 +10,6 @@ namespace Link {
 template <typename T>
 using PublisherPtr = std::shared_ptr<Link::PublisherBase<T>>;
 
-template <typename T>
-using SubscriberPtr = std::shared_ptr<Link::SubscriberBase<T>>;
+using SubscriberPtr = std::shared_ptr<Link::SubscriberBase>;
 
 }  // namespace Link
