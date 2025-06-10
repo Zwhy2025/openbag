@@ -4,6 +4,6 @@ output:
   filename_prefix: "openbag"
 
 topics:
-  - name: /test/topic
-    type: std_msgs/String
-    proto_file: "std_msgs/String.proto"
+  - name: string_topic_test
+    type: test.TestMessage
+    proto_file: test.proto

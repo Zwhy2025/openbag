@@ -339,18 +339,9 @@ private:
             auto publisherIt = m_publishers.find(topic);
             if (publisherIt != m_publishers.end())
             {
-                // 创建消息数据
-                // std::vector<unsigned char> messageData(
-                //     reinterpret_cast<const unsigned char*>(mcapMessage.data),
-                //     reinterpret_cast<const unsigned char*>(mcapMessage.data +
-                //                                            mcapMessage.dataSize));
-
                 auto msg_str = as_string_view(mcapMessage.data, mcapMessage.dataSize);
 
-                std::cout << "msg_str: " << msg_str << std::endl;
-
-                // 这里可以发布消息
-                // publisherIt->second->Publish(msg_str);
+                publisherIt->second->Publish(std::string(msg_str));
 
                 // 增加已播放消息计数
                 m_playedMessages++;

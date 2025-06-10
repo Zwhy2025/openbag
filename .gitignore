@@ -74,3 +74,6 @@ Pipfile.lock
 
 # === Openbag ===
 openbag/*
+
+# === mcap ===
+mcap-linux-amd64

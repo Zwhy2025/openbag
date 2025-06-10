@@ -16,6 +16,7 @@
 #include <string>
 #include <type_traits>
 
+#include "general.h"
 #include "link/link.hpp"
 #include "openbag/transport.hpp"
 
@@ -49,7 +50,7 @@ public:
 
 private:
     std::string topic_name_;
-    std::shared_ptr<Link::SubscriberBase<std::string>> link_subscriber_;
+    std::shared_ptr<Link::SubscriberBase> link_subscriber_;
 };
 
 /**
