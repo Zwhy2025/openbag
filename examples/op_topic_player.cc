@@ -13,14 +13,6 @@ extern openbag::MessageAdapterFactoryPtr GetLinkAdapterFactory();
 int main(int argc, char* argv[])
 {
     openbag::ConfigManager configManager;
-    configManager.LoadPlayerConfig("config/player.yaml");
-
-    if (!configManager.LoadPlayerConfig("config/player.yaml"))
-    {
-        std::cerr << "Failed to load player configuration!" << std::endl;
-        return -1;
-    }
-
     openbag::PlayerConfig playerConfig = configManager.GetPlayerConfig();
     playerConfig.input_path = "openbag_test.mcap";
     configManager.SetPlayerConfig(playerConfig);

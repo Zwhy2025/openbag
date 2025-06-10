@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     std::string executablePath = utils::GetCurrentExecutablePath();
     if (!executablePath.empty())
     {
-        std::string cwd = executablePath + "/../../../";
+        std::string cwd = executablePath + "/../";
         utils::SetCurrentWorkingDirectory(cwd);
     }
 

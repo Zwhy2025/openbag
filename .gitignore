@@ -73,7 +73,9 @@ poetry.lock
 Pipfile.lock
 
 # === Openbag ===
-openbag/*
+openbags/*
+bin/
+lib/
 
 # === mcap ===
 mcap-linux-amd64
