@@ -24,13 +24,17 @@ int main(int argc, char* argv[])
 
     openbag::ConfigManager configManager;
 
-    // 加载录制配置
-    configManager.LoadRecorderConfig("config/recorder.yaml");
-    configManager.LoadBufferConfig("config/buffer.yaml");
-    configManager.LoadStorageConfig("config/storage.yaml");
+    // Load recorder configuration
+    if (!configManager.LoadRecorderConfig("config/recorder.yaml") || !configManager.LoadBufferConfig("config/buffer.yaml") ||
+        !configManager.LoadStorageConfig("config/storage.yaml"))
+    {
+        std::cerr << "Failed to load configuration files!" << std::endl;
+        return -1;
+    }
 
     auto storageConfig = configManager.GetStorageConfig();
-    storageConfig.proto_search_paths.push_back("/workspace/examples/message");
+    // Add relative path to protobuf message definitions
+    storageConfig.proto_search_paths.push_back("examples/message");
     configManager.SetStorageConfig(storageConfig);
 
     // 创建消息适配器工厂

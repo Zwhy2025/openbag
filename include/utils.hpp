@@ -1,8 +1,12 @@
 #pragma once
 
+#ifdef __unix__
+#include <limits.h>
 #include <unistd.h>
+#endif
 
 #include <string>
+#include <vector>
 
 namespace utils {
 /**
@@ -11,12 +15,16 @@ namespace utils {
  */
 inline std::string GetCurrentExecutablePath()
 {
-    char buffer[1024];
-    ssize_t count = readlink("/proc/self/exe", buffer, sizeof(buffer) - 1);
+    std::vector<char> buffer(PATH_MAX);  // Start with a reasonable size, PATH_MAX is usually 4096
+    ssize_t count = 0;
+    while ((count = readlink("/proc/self/exe", buffer.data(), buffer.size())) == static_cast<ssize_t>(buffer.size()))
+    {
+        buffer.resize(buffer.size() * 2);  // Double the buffer size if it's too small
+    }
+
     if (count != -1)
     {
-        buffer[count] = '\0';
-        return std::string(buffer);
+        return std::string(buffer.data(), count);
     }
     return "";
 }
@@ -25,7 +33,7 @@ inline std::string GetCurrentExecutablePath()
  * @brief 设置当前工作路径
  * @param path 工作路径
  */
-inline void SetCurrentWorkingDirectory(const std::string& path) { chdir(path.c_str()); }
+inline bool SetCurrentWorkingDirectory(const std::string& path) { return chdir(path.c_str()) == 0; }
 
 /**
  * @brief 获取当前工作路径
@@ -33,9 +41,12 @@ inline void SetCurrentWorkingDirectory(const std::string& path) { chdir(path.c_s
  */
 inline std::string GetCurrentWorkingDirectory()
 {
-    char buffer[1024];
-    getcwd(buffer, sizeof(buffer));
-    return std::string(buffer);
+    char buffer[PATH_MAX];
+    if (getcwd(buffer, sizeof(buffer)) != nullptr)
+    {
+        return std::string(buffer);
+    }
+    return "";
 }
 
 }  // namespace utils
